@@ -14,3 +14,5 @@ backend/bin/
 backend/composer.phar
 backend/vendor/
 backend/web/bundles/
+
+.idea/
