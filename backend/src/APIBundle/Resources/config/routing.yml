@@ -1,0 +1,3 @@
+task_controller:
+    resource: "@APIBundle/Controller/TaskController.php"
+    type: rest
