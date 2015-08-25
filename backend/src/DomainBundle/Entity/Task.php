@@ -36,14 +36,42 @@ class Task
     private $done;
 
     /**
-     * @var string
+     * @var \DateTime
      * @Column(type="datetime", name="created_at")
      */
     private $createdAt;
 
     /**
-     * @var string
+     * @var \DateTime
      * @Column(type="datetime", name="modified_at")
      */
     private $modifiedAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+     * Toggle the task's status from check to uncheck and vice versa
+     * @return $this
+     */
+    public function toggleTaskState()
+    {
+        $this->done = !$this->done;
+        $this->updateDateOfLastModification();
+
+        return $this;
+    }
+
+    /**
+     * Update the task's modifiedAt date
+     * @return $this
+     */
+    private function updateDateOfLastModification()
+    {
+        $this->modifiedAt = new \DateTime();
+
+        return $this;
+    }
 }
