@@ -31,4 +31,27 @@ class TaskController extends FOSRestController
 
         return $this->view($task);
     }
+
+    public function deleteTaskAction($id)
+    {
+        $task = $this
+            ->getDoctrine()
+            ->getRepository('DomainBundle:Task')
+            ->find($id)
+        ;
+
+        if (is_null($task)) {
+            return $this->view(array('error' => sprintf('Task with id %d not found', $id)), 404);
+        }
+
+        $em = $this
+            ->getDoctrine()
+            ->getManager()
+        ;
+
+        $em->remove($task);
+        $em->flush();
+
+        return $this->view(null, 204);
+    }
 }
