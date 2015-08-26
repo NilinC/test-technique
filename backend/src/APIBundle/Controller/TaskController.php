@@ -3,15 +3,21 @@
 namespace APIBundle\Controller;
 
 use DomainBundle\Entity\Task;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class TaskController extends FOSRestController
 {
     /**
+     * @ApiDoc(
+     *      description="Get all the tasks",
+     *      statusCodes={
+     *          200="OK",
+     *          400="Bad Request"
+     *      }
+     * )
      * @return \FOS\RestBundle\View\View
      */
     public function getTasksAction()
@@ -26,6 +32,15 @@ class TaskController extends FOSRestController
     }
 
     /**
+     * @ApiDoc(
+     *      description="Get one task by its id",
+     *      statusCodes={
+     *          200="OK",
+     *          400="Bad Request",
+     *          404="Not Found"
+     *      },
+     *      output="DomainBundle\Entity\Task"
+     * )
      * @param $id
      * @return \FOS\RestBundle\View\View
      */
@@ -45,8 +60,16 @@ class TaskController extends FOSRestController
     }
 
     /**
+     * @ApiDoc(
+     *      description="Add a new task to the todolist",
+     *      statusCodes={
+     *          201="Created",
+     *          400="Bad Request"
+     *      },
+     *      output="DomainBundle\Entity\Task"
+     * )
      * @RequestParam(name="label", requirements=".+", description="task label")
-     * @RequestParam(name="done", requirements="true|false|0|1", description="task label")
+     * @RequestParam(name="done", requirements="true|false|0|1", description="task done")
      * @param ParamFetcherInterface $paramFetcher
      * @return \FOS\RestBundle\View\View
      */
@@ -65,13 +88,22 @@ class TaskController extends FOSRestController
         $em->persist($task);
         $em->flush();
 
-        return $this->view($task);
+        return $this->view($task, 201);
     }
 
     /**
+     * @ApiDoc(
+     *      description="Update a task's label or if it's checked or unchecked",
+     *      statusCodes={
+     *          200="OK",
+     *          400="Bad Request",
+     *          404="Not Found"
+     *      },
+     *      output="DomainBundle\Entity\Task"
+     * )
      * @param $id
      * @RequestParam(name="label", requirements=".+", description="task label")
-     * @RequestParam(name="done", requirements="true|false|0|1", description="task label")
+     * @RequestParam(name="done", requirements="true|false|0|1", description="task done")
      * @param ParamFetcherInterface $paramFetcher
      * @return \FOS\RestBundle\View\View
      */
@@ -105,6 +137,14 @@ class TaskController extends FOSRestController
     }
 
     /**
+     * @ApiDoc(
+     *      description="Delete a task",
+     *      statusCodes={
+     *          204="No Content",
+     *          400="Bad Request",
+     *          404="Not Found"
+     *      }
+     * )
      * @param $id
      * @return \FOS\RestBundle\View\View
      */
@@ -132,6 +172,15 @@ class TaskController extends FOSRestController
     }
 
     /**
+     * @ApiDoc(
+     *      description="Toggle a task from checked to unchecked and vice-versa",
+     *      statusCodes={
+     *          200="OK",
+     *          400="Bad Request",
+     *          404="Not Found"
+     *      },
+     *      output="DomainBundle\Entity\Task"
+     * )
      * @param $id
      * @return \FOS\RestBundle\View\View
      */

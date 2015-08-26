@@ -1,3 +1,8 @@
 task_controller:
     resource: "@APIBundle/Controller/TaskController.php"
     type: rest
+    prefix:   /api
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
