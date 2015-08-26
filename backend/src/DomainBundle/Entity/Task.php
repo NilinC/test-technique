@@ -52,6 +52,15 @@ class Task
         $this->createdAt = new \DateTime();
     }
 
+    public function updateTask($label, $done)
+    {
+        $this->label = $label;
+        $this->done = $done;
+        $this->updateDateOfLastModification();
+
+        return $this;
+    }
+
     /**
      * Toggle the task's status from check to uncheck and vice versa
      * @return $this
