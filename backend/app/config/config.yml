@@ -98,3 +98,10 @@ fos_rest:
         include_format: false
 
 nelmio_api_doc: ~
+
+nelmio_cors:
+    paths:
+        '^/api/':
+            allow_origin: ['*']
+            allow_methods: ['POST', 'PUT', 'GET', 'DELETE', 'PATCH']
+
