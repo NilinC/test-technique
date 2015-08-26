@@ -45,6 +45,66 @@ class TaskController extends FOSRestController
     }
 
     /**
+     * @RequestParam(name="label", requirements=".+", description="task label")
+     * @RequestParam(name="done", requirements="true|false|0|1", description="task label")
+     * @param ParamFetcherInterface $paramFetcher
+     * @return \FOS\RestBundle\View\View
+     */
+    public function postTaskAction(ParamFetcherInterface $paramFetcher)
+    {
+        $label = $paramFetcher->get("label");
+        $done = $paramFetcher->get("done");
+
+        $task = Task::create($label, $done);
+
+        $em = $this
+            ->getDoctrine()
+            ->getManager()
+        ;
+
+        $em->persist($task);
+        $em->flush();
+
+        return $this->view($task);
+    }
+
+    /**
+     * @param $id
+     * @RequestParam(name="label", requirements=".+", description="task label")
+     * @RequestParam(name="done", requirements="true|false|0|1", description="task label")
+     * @param ParamFetcherInterface $paramFetcher
+     * @return \FOS\RestBundle\View\View
+     */
+    public function putTaskAction($id, ParamFetcherInterface $paramFetcher)
+    {
+        /** @var Task $task */
+        $task = $this
+            ->getDoctrine()
+            ->getRepository('DomainBundle:Task')
+            ->find($id)
+        ;
+
+        if (is_null($task)) {
+            return $this->view(array('error' => sprintf('Task with id %d not found', $id)), 404);
+        }
+
+        $label = $paramFetcher->get("label");
+        $done = $paramFetcher->get("done");
+
+        $task->update($label, $done);
+
+        $em = $this
+            ->getDoctrine()
+            ->getManager()
+        ;
+
+        $em->persist($task);
+        $em->flush();
+
+        return $this->view($task);
+    }
+
+    /**
      * @param $id
      * @return \FOS\RestBundle\View\View
      */
@@ -69,42 +129,6 @@ class TaskController extends FOSRestController
         $em->flush();
 
         return $this->view(null, 204);
-    }
-
-    /**
-     * @param $id
-     * @RequestParam(name="label", requirements=".+", description="task label")
-     * @RequestParam(name="done", requirements="true | false | 0 | 1", description="task label")
-     * @param ParamFetcherInterface $paramFetcher
-     * @return \FOS\RestBundle\View\View
-     */
-    public function putTaskAction($id, ParamFetcherInterface $paramFetcher)
-    {
-        /** @var Task $task */
-        $task = $this
-            ->getDoctrine()
-            ->getRepository('DomainBundle:Task')
-            ->find($id)
-        ;
-
-        if (is_null($task)) {
-            return $this->view(array('error' => sprintf('Task with id %d not found', $id)), 404);
-        }
-
-        $label = $paramFetcher->get("label");
-        $done = $paramFetcher->get("done");
-
-        $task->updateTask($label, $done);
-
-        $em = $this
-            ->getDoctrine()
-            ->getManager()
-        ;
-
-        $em->persist($task);
-        $em->flush();
-
-        return $this->view($task);
     }
 
     /**

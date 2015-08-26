@@ -43,7 +43,7 @@ class Task
 
     /**
      * @var \DateTime
-     * @Column(type="datetime", name="modified_at")
+     * @Column(type="datetime", name="modified_at", nullable=true)
      */
     private $modifiedAt;
 
@@ -52,10 +52,31 @@ class Task
         $this->createdAt = new \DateTime();
     }
 
-    public function updateTask($label, $done)
+    /**
+     * Create a new Task
+     * @param $label
+     * @param $done
+     * @return Task
+     */
+    static public function create($label, $done)
+    {
+        $task = new self();
+        $task->label = $label;
+        $task->done = (boolean) $done;
+
+        return $task;
+    }
+
+    /**
+     * Update the task's label and if it done or not
+     * @param $label
+     * @param $done
+     * @return $this
+     */
+    public function update($label, $done)
     {
         $this->label = $label;
-        $this->done = $done;
+        $this->done = (boolean) $done;
         $this->updateDateOfLastModification();
 
         return $this;
