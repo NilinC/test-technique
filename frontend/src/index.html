@@ -17,12 +17,28 @@
             <div class="col-lg-offset-4 col-lg-4 todolist">
                 <h1>Todolist</h1>
                 <div ng-controller="ToDoListController as todoslist">
-                    <ul ng-repeat="todo in todoslist.todos">
-                        <li ng-class="{ checked: todo.done }"><input type="checkbox" ng-checked="todo.done" ng-click="todoslist.todoChecked(todo)" /> {{ todo.label }}</li>
+                    <ul>
+                        <li ng-repeat="task in todoslist.todos" ng-class="{ checked: task.done }">
+                            <div ng-show="!task.updating">
+                                <input type="checkbox" ng-checked="task.done" ng-click="todoslist.taskChecked(task)" />
+                                {{ task.label }}
+                            </div>
+
+                            <div ng-show="task.updating">
+                                <form ng-submit="todoslist.updateTask(task)">
+                                    <input type="text" ng-model="task.label"/>
+                                </form>
+                            </div>
+
+                            <div class="icons">
+                                <span ng-show="!task.done" ng-click="task.updating = true" class="btn-update glyphicon glyphicon-pencil"></span>
+                                <span ng-click="todoslist.deleteTask(task)" class="btn-delete glyphicon glyphicon-remove"></span>
+                            </div>
+                        </li>
                     </ul>
 
-                    <form ng-submit="todoslist.addNewTodo()">
-                        <input type="text" ng-model="todoslist.todoText" placeholder="Ajouter une nouvelle tâche..."/>
+                    <form ng-submit="todoslist.addNewTask()">
+                        <input type="text" ng-model="todoslist.taskText" placeholder="Ajouter une nouvelle tâche..."/>
                     </form>
 
                     <span>{{ todoslist.remaining()}} tâches restantes sur {{ todoslist.todos.length }}</span>
