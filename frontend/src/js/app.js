@@ -1,20 +1,33 @@
 angular.module('testTechnique', [])
-    .controller('ToDoListController', function() {
+    .controller('ToDoListController', function($http) {
         var todoslist = this;
-        todoslist.todos = [
-            { text: 'Tâche 1', done: true },
-            { text: 'Tâche 2', done: false },
-            { text: 'Tâche 3', done: false },
-            { text: 'Tâche 4', done: false }
-        ];
+        todoslist.todos = [];
+
+        $http.get('http://localhost:8000/api/tasks').
+            then(function(response) {
+                todoslist.todos = response.data;
+            }, function() {
+                alert('An error occurred');
+            });
 
         todoslist.todoChecked = function(todo) {
-            todo.done = !todo.done;
+            $http.patch('http://localhost:8000/api/tasks/'+ todo.id +'/check', {}).
+                then(function() {
+                    todo.done = !todo.done;
+                }, function() {
+                    alert('An error occurred');
+                });
         };
 
         todoslist.addNewTodo = function() {
-            todoslist.todos.push({ text: todoslist.todoText, done: false });
-            todoslist.todoText = '';
+            $http.post('http://localhost:8000/api/tasks', { label: todoslist.todoText, done: 0 }).
+                then(function(response) {
+                    todoslist.todos.push(response.data);
+                    todoslist.todoText = '';
+                }, function() {
+                    alert('An error occurred');
+                });
+
         };
 
         todoslist.remaining = function() {

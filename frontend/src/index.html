@@ -18,7 +18,7 @@
                 <h1>Todolist</h1>
                 <div ng-controller="ToDoListController as todoslist">
                     <ul ng-repeat="todo in todoslist.todos">
-                        <li ng-class="{ checked: todo.done }"><input type="checkbox" ng-checked="todo.done" ng-click="todoslist.todoChecked(todo)" /> {{ todo.text }}</li>
+                        <li ng-class="{ checked: todo.done }"><input type="checkbox" ng-checked="todo.done" ng-click="todoslist.todoChecked(todo)" /> {{ todo.label }}</li>
                     </ul>
 
                     <form ng-submit="todoslist.addNewTodo()">
